@@ -1,0 +1,35 @@
+<p class="pull-right">
+  <%= link_to "delete all versions", bulk_delete_versions_path, method: :delete, class: "btn btn-primary" %>
+</p>
+<h1 class="text-center">Versions</h1>
+
+<table class="table">
+  <tr>
+    <th>version id</th>
+    <th>item_type</th>
+    <th>item_id</th>
+    <th>event</th>
+    <th>whodunnit</th>
+    <th>version.changeset</th>
+    <th>action</th>
+  </tr>
+  <% @versions.each do |version| %>
+    <tr>
+      <td><%= version.id %></td>
+      <td><%= version.item_type %></td>
+      <td><%= version.item_id %></td>
+      <td><%= version.event %></td>
+      <td><%= version.whodunnit %></td>
+      <td>
+        <ul>
+          <% version.changeset.each do |key, value| %>
+            <li>从 <%= value[0] %> 改成 <%= value[1] %></li>
+          <% end %>
+        </ul>
+      </td>
+      <td><%= link_to "undo", revert_version_path(version), method: :post %></td>
+    </tr>
+  <% end %>
+</table>
+
+<%= paginate @versions %>

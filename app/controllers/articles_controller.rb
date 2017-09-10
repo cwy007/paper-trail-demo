@@ -64,7 +64,9 @@ class ArticlesController < ApplicationController
 
   private
     def undo_link
-      view_context.link_to "undo", revert_version_path(@article.versions.last), method: :post
+      if @article.versions.present?
+        view_context.link_to "undo", revert_version_path(@article.versions.last), method: :post
+      end
     end
 
     # Use callbacks to share common setup or constraints between actions.

@@ -1,4 +1,8 @@
 class VersionsController < ApplicationController
+  def index
+    @versions = PaperTrail::Version.order("id DESC").page(params[:page])
+  end
+
   def revert
     @version = PaperTrail::Version.find(params[:id])
     if @version.reify
@@ -11,4 +15,11 @@ class VersionsController < ApplicationController
     flash[:notice] = "Undid #{@version.event} #{link}"
     redirect_back(fallback_location: root_path)
   end
+
+  def bulk_delete
+    PaperTrail::Version.delete_all
+    flash[:notice] = "deleted all versions successfully"
+    redirect_back(fallback_location: root_path)
+  end
+
 end
