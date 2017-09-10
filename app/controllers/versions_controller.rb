@@ -1,7 +1,12 @@
 class VersionsController < ApplicationController
   def revert
-    @version = Version.find(params[:id])
-    @version.reify.save!
-    redirect_back(fallback_location: root_path), notice: "Undid #{@version.event}"
-  end 
+    @version = PaperTrail::Version.find(params[:id])
+    if @version.reify
+      @version.reify.save!
+    else
+      @version.item.destroy
+    end 
+    flash[:notice] = "Undid #{@version.event}"
+    redirect_back(fallback_location: root_path)
+  end
 end
